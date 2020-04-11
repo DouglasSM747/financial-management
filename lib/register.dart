@@ -92,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.only(top: 100),
+          padding: EdgeInsets.only(top: 60),
         ),
       ),
     );
@@ -100,6 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextFormField formText(String texto, IconData icon, {bool password = false}) {
     return TextFormField(
+      autofocus: false,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -121,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
       textAlign: TextAlign.start,
       validator: (value) {
         if (value.isEmpty) {
-          return 'Please enter some valeu';
+          return 'Please enter some value';
         }
         return null;
       },
