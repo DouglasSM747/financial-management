@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class Cadastro extends StatelessWidget {
+class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Tela Cadastro',
-      home: CadastroPage(),
+      home: RegisterPage(),
     );
   }
 }
 
-class CadastroPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _CadastroPageState createState() => _CadastroPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _CadastroPageState extends State<CadastroPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
