@@ -1,4 +1,5 @@
-import 'package:financial/register.dart';
+import 'dart:developer';
+import 'package:financial/register_page.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatelessWidget {
@@ -18,6 +19,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Service service = new Service();
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {

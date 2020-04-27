@@ -1,7 +1,8 @@
-import 'package:financial/login.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(Login());
+import 'cards.dart/card_page.dart';
+
+void main() => runApp(CardClass());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

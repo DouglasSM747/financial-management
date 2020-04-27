@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "248951170025",
+    "firebase_url": "https://financial-management-ca51b.firebaseio.com",
+    "project_id": "financial-management-ca51b",
+    "storage_bucket": "financial-management-ca51b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248951170025:android:dfb3acefa59665267de178",
+        "android_client_info": {
+          "package_name": "com.example.financial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "248951170025-bq2vmk1dpqdkj2sqclcce77cj338c4vl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3x52oOvyzCseX9Gk51DsjXv8jVj6jlbc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "248951170025-bq2vmk1dpqdkj2sqclcce77cj338c4vl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
