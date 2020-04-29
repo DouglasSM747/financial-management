@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:financial/crud/servicesCrud.dart';
 import 'package:financial/layout/button.dart';
+import 'package:financial/pages/editCart.dart';
 import 'package:flutter/material.dart';
 
 class CardClass extends StatelessWidget {
@@ -39,6 +40,33 @@ class _CardPageState extends State<CardPage> {
     return result;
   }
 
+  editarCart(int index) {
+    Map<String, dynamic> map = querySnapshot.documents[index].data;
+    if (map['type'] == 0) {
+      map['limit'] = 0;
+      map['limit_atual'] = 0;
+    }
+    if (map['type'] == 1) {
+      map['balance'] = 0;
+      map['balance_atual'] = 0;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => EditCartPage(
+          idUser: "jseGCXq0n5tJ728Tsypa",
+          idCard: querySnapshot.documents[index].documentID,
+          type: map['type'],
+          balance: map['balance'],
+          balanceAtual: map['balance_atual'],
+          limit: map['limit'],
+          limitAtual: map['limit_atual'],
+        ),
+      ),
+    );
+  }
+
   //Instantiate servico FireStore
   ServiceCrudFireStore serviceCrudFireStore = new ServiceCrudFireStore();
   //Variable snapshots return Firestore
@@ -69,7 +97,7 @@ class _CardPageState extends State<CardPage> {
           padding: EdgeInsets.only(top: 80),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: carregandoInfos(),
+          child: loadPage(),
         ),
       ),
     );
@@ -124,7 +152,7 @@ class _CardPageState extends State<CardPage> {
   }
 
   //Widget responsible for waiting to load the cards and check if the user has a card or not
-  Widget carregandoInfos() {
+  Widget loadPage() {
     if (querySnapshot == null) {
       return Center(
         child: Text(
@@ -223,7 +251,9 @@ class _CardPageState extends State<CardPage> {
           ButtonStandard(
             width: MediaQuery.of(context).size.width - 50,
             text: "Edit Cart",
-            voidCallback: () {},
+            voidCallback: () {
+              editarCart(_current);
+            },
           ),
           SizedBox(
             height: 20,

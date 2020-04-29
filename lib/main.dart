@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'cards.dart/card_page.dart';
 
-void main() => runApp(CardClass());
+void main() => runApp(
+      MaterialApp(
+        home: CardClass(),
+        title: 'Flutter Demo',
+        theme: ThemeData(
+            backgroundColor: Colors.black,
+            // Use the old theme but apply the following three changes
+            textTheme: TextTheme(body1: TextStyle(fontFamily: "Open_Sans"))),
+      ),
+    );
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

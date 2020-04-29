@@ -44,8 +44,6 @@ class ServiceCrudFireStore {
         .document(idUser)
         .collection('card')
         .document(idCard)
-        .updateData(
-      {'balance_atual': map['balance_atual']},
-    );
+        .updateData(map);
   }
 }
