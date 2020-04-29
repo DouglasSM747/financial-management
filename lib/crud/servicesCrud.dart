@@ -37,4 +37,15 @@ class ServiceCrudFireStore {
         .collection('card')
         .getDocuments();
   }
+
+  void updateCardInfo(String idUser, String idCard, Map<String, dynamic> map) {
+    _db
+        .collection('user')
+        .document(idUser)
+        .collection('card')
+        .document(idCard)
+        .updateData(
+      {'balance_atual': map['balance_atual']},
+    );
+  }
 }
