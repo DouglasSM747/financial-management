@@ -37,4 +37,13 @@ class ServiceCrudFireStore {
         .collection('card')
         .getDocuments();
   }
+
+  Future<void> addCard(data) async {
+    _db.collection("user").document("MaNagOx8OJr6NKhmOkmC").collection("card").add(data).then(
+      (result) {
+        print("cartao adicionado");
+      },
+    );
+  }
+
 }

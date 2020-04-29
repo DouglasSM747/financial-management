@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:financial/crud/servicesCrud.dart';
+
 
 class AddCard extends StatelessWidget {
   @override
@@ -44,28 +46,28 @@ class _AddCardPageState extends State<AddCardPage> {
                 ),
                 this.addCheckbox(this.creditCard, "Credit Card"),
                 this.addCheckbox(this.debitCard, "Debit Card"),
-                /* Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Credit Card", style: TextStyle(fontSize: 21, color: Colors.white)),
-                  this.checkbox(creditCard, this.creditCard)
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Debit card", style: TextStyle(fontSize: 21, color: Colors.white)),
-                  this.checkbox(debitCard, this.debitCard)
-                ],
-              ), */
                 SizedBox(
-                  child: this.infoCards(this.creditCard, "Limit"),
+                  child: this.infoCards(this.creditCard, "Limit", "Atual limit"),
                   width: MediaQuery.of(context).size.width - 15,
                 ),
+                SizedBox(height: 10),
                 SizedBox(
-                  child: this.infoCards(this.debitCard, "Balance"),
+                  child: this.infoCards(this.debitCard, "Balance", "Atual balance"),
                   width: MediaQuery.of(context).size.width - 15,
-                )
+                ),
+                SizedBox(height: 10),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 80,
+                  child: RaisedButton(
+                      child: Text(
+                        "Add card",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: Colors.grey[700],
+                      onPressed: () {
+                        print("Deu certo");
+                      }),
+                ),
               ],
             ),
           ),
@@ -73,20 +75,6 @@ class _AddCardPageState extends State<AddCardPage> {
       ),
     );
   }
-/* 
-  Checkbox checkbox(option, bool val){
-    return Checkbox(
-      value: option,
-      activeColor: Colors.green,
-      checkColor: Colors.white,
-      tristate: false,
-      onChanged: (bool value) {
-        setState(() {
-          val = value;
-        });
-      }
-    );
-  } */
 
   Widget addCheckbox(bool val, String text) {
     return Column(
@@ -127,11 +115,7 @@ class _AddCardPageState extends State<AddCardPage> {
             ),
           ),
         ),
-        Text(
-          text,
-          style: TextStyle(fontSize: 21, color: Colors.white),
-          textAlign: TextAlign.center,
-        )
+        Text(text, style: TextStyle(fontSize: 21, color: Colors.white), textAlign: TextAlign.center),
       ],
     );
   }
@@ -152,11 +136,15 @@ class _AddCardPageState extends State<AddCardPage> {
             prefixIcon: Icon(icon, color: Colors.white)));
   }
 
-  Widget infoCards(bool type, String text) {
+  Widget infoCards(bool type, String text1, String text2) {
     if (type) {
-      return Container(
-        child: this.textField(text, Icons.monetization_on),
-        width: MediaQuery.of(context).size.width - 15,
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          this.textField(text1, Icons.monetization_on),
+          SizedBox(height: 10),
+          this.textField(text2, Icons.monetization_on)
+        ],
       );
     }
   }
