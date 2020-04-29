@@ -43,20 +43,22 @@ class _AddCardPageState extends State<AddCardPage> {
                   child : this.textField("Card name", Icons.card_giftcard),
                   width: MediaQuery.of(context).size.width - 15,
                 ),
-              Column(
+                this.addCheckbox(creditCard, this.creditCard, "Credit Card"),
+                this.addCheckbox(debitCard, this.debitCard, "Debit Card"),
+              /* Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Credit Card"),
+                  Text("Credit Card", style: TextStyle(fontSize: 21, color: Colors.white)),
                   this.checkbox(creditCard, this.creditCard)
                 ],
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Debit card"),
+                  Text("Debit card", style: TextStyle(fontSize: 21, color: Colors.white)),
                   this.checkbox(debitCard, this.debitCard)
                 ],
-              ),
+              ), */
               SizedBox(
                 child: this.infoCards(this.creditCard, "Limit"),
                 width: MediaQuery.of(context).size.width - 15,
@@ -72,24 +74,59 @@ class _AddCardPageState extends State<AddCardPage> {
       ),
     );
   }
-
+/* 
   Checkbox checkbox(option, bool val){
     return Checkbox(
       value: option,
+      activeColor: Colors.green,
+      checkColor: Colors.white,
+      tristate: false,
       onChanged: (bool value) {
         setState(() {
           val = value;
         });
       }
     );
+  } */
+
+  Widget addCheckbox(option, bool val, String text){
+    return Column( 
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:[ Transform.scale( 
+              scale: 1.5,
+              child: Checkbox(
+                value: option,
+                onChanged: (bool value){setState(() {
+                  val = value;
+                });},
+                activeColor: Colors.green,
+                checkColor: Colors.white,
+                tristate: false,
+              ),
+          ), 
+ 
+        Text(text, 
+          style: TextStyle(fontSize: 21), 
+          textAlign: TextAlign.center,)
+ 
+      ]);
   }
+
 
   TextField textField(String text, IconData icon){
     return TextField(
         decoration: InputDecoration(
-        border: InputBorder.none,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderSide: BorderSide(color: Colors.white, width: 1.5),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderSide: BorderSide(color: Colors.white, width: 1.5),
+        ),
         hintText: text,
-        prefixIcon: Icon(icon))
+        hintStyle: TextStyle(fontSize: 20.0, color: Colors.white),
+        prefixIcon: Icon(icon, color: Colors.white))
     );
   }
 
