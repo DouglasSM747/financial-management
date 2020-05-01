@@ -74,7 +74,7 @@ class _CardPageState extends State<CardPage> {
   DocumentSnapshot doc;
   get loadUserCards {
     //assigning user card data to a list, type QuerySnapshot;
-    serviceCrudFireStore.getCardsUser('jseGCXq0n5tJ728Tsypa').then(
+    serviceCrudFireStore.getCardsUser('nV9QUvjKSmZUhVA5m4v9').then(
       (onValue) {
         setState(
           () {
@@ -163,8 +163,14 @@ class _CardPageState extends State<CardPage> {
     } else if (querySnapshot.documents.length == 0) {
       return Column(
         children: <Widget>[
+          Image.asset(
+            'assets/images/wallet.png',
+            height: 300,
+            width: 300,
+            fit: BoxFit.contain,
+          ),
           SizedBox(
-            height: 100,
+            height: 80,
             width: MediaQuery.of(context).size.width - 60,
             child: Text(
               "Hello my friend, it looks like you don't have a card, how about adding it? Just click here below.",
@@ -175,8 +181,8 @@ class _CardPageState extends State<CardPage> {
             ),
           ),
           SizedBox(
-            height: 200,
-            width: 200,
+            height: 150,
+            width: 150,
             child: FlatButton(
               child: Image.asset('assets/images/Add.png'),
               onPressed: () {},

@@ -30,7 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
             children: <Widget>[
               SizedBox(
                 child: Image.asset(
-                  'assets/images/1.png',
+                  'assets/images/wallet.png',
                 ),
                 width: MediaQuery.of(context).size.width - 180,
                 height: 80,
