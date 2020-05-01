@@ -45,4 +45,13 @@ class ServiceCrudFireStore {
       },
     );
   }
+
+  void updateCardInfo(String idUser, String idCard, Map<String, dynamic> map) {
+    _db
+        .collection('user')
+        .document(idUser)
+        .collection('card')
+        .document(idCard)
+        .updateData(map);
+  }
 }
