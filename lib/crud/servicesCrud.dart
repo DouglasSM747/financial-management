@@ -38,12 +38,11 @@ class ServiceCrudFireStore {
         .getDocuments();
   }
 
-  Future<void> addCard(data) async {
-    _db.collection("user").document("MaNagOx8OJr6NKhmOkmC").collection("card").add(data).then(
+  Future<void> addCard(String idUser, Map<String, dynamic> data) async {
+    _db.collection("user").document(idUser).collection("card").add(data).then(
       (result) {
         print("cartao adicionado");
       },
     );
   }
-
 }
