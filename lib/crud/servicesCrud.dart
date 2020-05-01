@@ -46,4 +46,21 @@ class ServiceCrudFireStore {
         .document(idCard)
         .updateData(map);
   }
+
+  Future<void> addCard(String idUser, Map<String, dynamic> data) async {
+    _db.collection("user").document(idUser).collection("card").add(data).then(
+      (result) {
+        print("cartao adicionado");
+      },
+    );
+  }
+
+  void updateCardInfo(String idUser, String idCard, Map<String, dynamic> map) {
+    _db
+        .collection('user')
+        .document(idUser)
+        .collection('card')
+        .document(idCard)
+        .updateData(map);
+  }
 }
