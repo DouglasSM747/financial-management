@@ -1,6 +1,6 @@
+import 'package:financial/crud/servicesCrud.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:financial/crud/servicesCrud.dart';
 
 
 class AddCard extends StatelessWidget {
@@ -20,8 +20,57 @@ class AddCardPage extends StatefulWidget {
 }
 
 class _AddCardPageState extends State<AddCardPage> {
+  ServiceCrudFireStore serviceCrudFireStore = new ServiceCrudFireStore();
+  void addCards() {
+    //assigning user card data to a list, type QuerySnapshot;
+   /*  var record = {
+      "balance": this._controllerBalance,
+      "balance_atual": this._controllerBalanceAtual,
+      "limit": this._controlleLimit,
+      "limit_atual": this._controlleLimitAtual,
+      "nameCard": this._controllerNameCard,
+      "type": 2
+    }; */
+    var record; 
+    if(creditCard && debitCard){
+      record = {
+        "balance": this._controllerBalance,
+        "balance_atual": this._controllerBalanceAtual,
+        "limit": this._controlleLimit,
+        "limit_atual": this._controlleLimitAtual,
+        "nameCard": this._controllerNameCard,
+        "type": 2
+      }; 
+    }
+    else if(creditCard){
+      record = {
+        "limit": this._controlleLimit,
+        "limit_atual": this._controlleLimitAtual,
+        "nameCard": this._controllerNameCard,
+        "type": 1
+      };
+    }
+    else{
+      record = {
+        "balance": this._controllerBalance,
+        "balance_atual": this._controllerBalanceAtual,
+        "nameCard": this._controllerNameCard,
+        "type": 0
+      };
+    }
+  
+    this.serviceCrudFireStore.addCard(record);
+  }
+
   bool creditCard = false;
   bool debitCard = false;
+
+  final _controllerBalance = TextEditingController();
+  final _controllerBalanceAtual = TextEditingController();
+  final _controlleLimit = TextEditingController();
+  final _controlleLimitAtual = TextEditingController();
+  final _controllerNameCard = TextEditingController();
+  int type = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +90,18 @@ class _AddCardPageState extends State<AddCardPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  child: this.textField("Card name", Icons.card_giftcard),
+                  child: textField("Card name", Icons.card_giftcard, this._controllerNameCard),
                   width: MediaQuery.of(context).size.width - 15,
                 ),
                 this.addCheckbox(this.creditCard, "Credit Card"),
                 this.addCheckbox(this.debitCard, "Debit Card"),
                 SizedBox(
-                  child: this.infoCards(this.creditCard, "Limit", "Atual limit"),
+                  child: this.infoCards(this.creditCard, "Limit", "Atual limit", this._controlleLimit, this._controlleLimitAtual),
                   width: MediaQuery.of(context).size.width - 15,
                 ),
                 SizedBox(height: 10),
                 SizedBox(
-                  child: this.infoCards(this.debitCard, "Balance", "Atual balance"),
+                  child: this.infoCards(this.debitCard, "Balance", "Atual balance", this._controllerBalance, this._controllerBalanceAtual),
                   width: MediaQuery.of(context).size.width - 15,
                 ),
                 SizedBox(height: 10),
@@ -66,6 +115,7 @@ class _AddCardPageState extends State<AddCardPage> {
                       color: Colors.grey[700],
                       onPressed: () {
                         print("Deu certo");
+                        this.addCards();
                       }),
                 ),
               ],
@@ -120,8 +170,9 @@ class _AddCardPageState extends State<AddCardPage> {
     );
   }
 
-  TextField textField(String text, IconData icon) {
+  TextField textField(String text, IconData icon, TextEditingController textEditingController) {
     return TextField(
+        controller: textEditingController,
         decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -133,19 +184,24 @@ class _AddCardPageState extends State<AddCardPage> {
             ),
             hintText: text,
             hintStyle: TextStyle(fontSize: 20.0, color: Colors.white),
-            prefixIcon: Icon(icon, color: Colors.white)));
+            prefixIcon: Icon(icon, color: Colors.white)),
+            style: TextStyle(color: Colors.green)
+            );
+          
   }
 
-  Widget infoCards(bool type, String text1, String text2) {
+  Widget infoCards(bool type, String text1, String text2, TextEditingController valor1, TextEditingController valor2) {
     if (type) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          this.textField(text1, Icons.monetization_on),
+          this.textField(text1, Icons.monetization_on, valor1),
           SizedBox(height: 10),
-          this.textField(text2, Icons.monetization_on)
+          this.textField(text2, Icons.monetization_on, valor2)
         ],
       );
     }
   }
+
+
 }
