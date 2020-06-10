@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ButtonStandard extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class ButtonStandard extends StatefulWidget {
       {@required String text,
       double width = 200,
       @required VoidCallback voidCallback,
-      double height = 45}) {
+      double height = 40}) {
     this._width = width;
     this._height = height;
     this._voidCallback = voidCallback;
@@ -26,11 +27,11 @@ class _ButtonStandardState extends State<ButtonStandard> {
       height: widget._height,
       child: RaisedButton(
         shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(10.0),
-            side: BorderSide(color: Colors.green)),
+          borderRadius: new BorderRadius.circular(10.0),
+        ),
         child: Text(
           widget._text,
-          style: TextStyle(fontSize: 30),
+          style: GoogleFonts.b612(fontSize: 30),
         ),
         onPressed: widget._voidCallback,
       ),

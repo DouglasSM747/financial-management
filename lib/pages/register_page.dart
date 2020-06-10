@@ -1,3 +1,4 @@
+import 'package:financial/layout/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -72,18 +73,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 20,
                     ),
                     SizedBox(
-                        width: MediaQuery.of(context).size.width - 80,
-                        child: RaisedButton(
-                          onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
-                            if (_formKey.currentState.validate()) {
-                              // Process data.
-                            }
-                          },
-                          /*  */
-                          child: Text('Sign Up'),
-                        ))
+                      width: MediaQuery.of(context).size.width - 80,
+                      child: ButtonStandard(
+                        text: "Sign Up",
+                        voidCallback: () {
+                          // Validate will return true if the form is valid, or false if
+                          // the form is invalid.
+                          if (_formKey.currentState.validate()) {
+                            // Process data.
+                          }
+                        },
+                      ),
+                    )
                     /*  */
                   ],
                 ),

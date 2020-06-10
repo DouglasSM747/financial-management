@@ -2,17 +2,18 @@ import 'package:financial/crud/servicesCrud.dart';
 import 'package:financial/layout/button.dart';
 import 'package:flutter/material.dart';
 
+import 'cardPage.dart';
+
 class EditCartPage extends StatefulWidget {
-  final String idUser;
   final String idCard;
   final int type;
   final int limit;
   final int balance;
   final int limitAtual;
   final int balanceAtual;
+
   EditCartPage(
-      {this.idUser,
-      this.idCard,
+      {this.idCard,
       this.type,
       this.balanceAtual,
       this.balance,
@@ -26,11 +27,11 @@ class _EditCartPageState extends State<EditCartPage> {
   final _controllerBalanceAtual = TextEditingController();
   final _controlleLimit = TextEditingController();
   final _controlleLimitAtual = TextEditingController();
-  //Instantiate servico FireStore
+  //Instantiate service FireStore
   ServiceCrudFireStore serviceCrudFireStore = new ServiceCrudFireStore();
-  updateCard() {
-    serviceCrudFireStore.updateCardInfo(
-      widget.idUser,
+  updateCard() async {
+    await serviceCrudFireStore.updateCardInfo(
+      CardPage.idUser,
       widget.idCard,
       {
         'balance': _controllerBalance.text.isEmpty
@@ -47,6 +48,8 @@ class _EditCartPageState extends State<EditCartPage> {
             : int.parse(_controlleLimitAtual.text),
       },
     );
+    print("Update Finalized");
+    Navigator.pop(context);
   }
 
   @override
@@ -101,11 +104,11 @@ class _EditCartPageState extends State<EditCartPage> {
     } else if (widget.type == 0) {
       return Column(
         children: <Widget>[
-          formText('Balance: ' + widget.limit.toString(), Icons.money_off,
+          formText('Balance: ' + widget.balance.toString(), Icons.money_off,
               _controllerBalance),
           SizedBox(height: 20),
-          formText('Balance Atual: ' + widget.limit.toString(), Icons.money_off,
-              _controllerBalanceAtual)
+          formText('Balance Atual: ' + widget.balanceAtual.toString(),
+              Icons.money_off, _controllerBalanceAtual)
         ],
       );
     } else {
@@ -114,8 +117,8 @@ class _EditCartPageState extends State<EditCartPage> {
           formText('Limit: ' + widget.limit.toString(), Icons.money_off,
               _controlleLimit),
           SizedBox(height: 20),
-          formText('Limit Atual: ' + widget.limit.toString(), Icons.money_off,
-              _controlleLimitAtual)
+          formText('Limit Atual: ' + widget.limitAtual.toString(),
+              Icons.money_off, _controlleLimitAtual)
         ],
       );
     }

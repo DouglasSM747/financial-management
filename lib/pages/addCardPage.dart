@@ -2,53 +2,43 @@ import 'package:financial/crud/servicesCrud.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class AddCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'First Acess Page',
-      home: AddCardPage(),
-    );
-  }
-}
+import 'cardPage.dart';
 
 class AddCardPage extends StatefulWidget {
   @override
-  // final String _idUser;
-  // AddCardPage(this._idUser);
   _AddCardPageState createState() => _AddCardPageState();
 }
 
 class _AddCardPageState extends State<AddCardPage> {
   ServiceCrudFireStore serviceCrudFireStore = new ServiceCrudFireStore();
+
   void addCards() {
     var record;
     if (creditCard && debitCard) {
       record = {
-        "balance": this._controllerBalance,
-        "balance_atual": this._controllerBalanceAtual,
-        "limit": this._controlleLimit,
-        "limit_atual": this._controlleLimitAtual,
-        "nameCard": this._controllerNameCard,
+        "balance": int.parse(this._controllerBalance.text),
+        "balance_atual": int.parse(this._controllerBalanceAtual.text),
+        "limit": int.parse(_controlleLimit.text),
+        "limit_atual": int.parse(_controlleLimitAtual.text),
+        "nameCard": this._controllerNameCard.text,
         "type": 2
       };
     } else if (creditCard) {
       record = {
-        "limit": this._controlleLimit,
-        "limit_atual": this._controlleLimitAtual,
-        "nameCard": this._controllerNameCard,
+        "limit": int.parse(_controlleLimit.text),
+        "limit_atual": int.parse(_controlleLimitAtual.text),
+        "nameCard": this._controllerNameCard.text,
         "type": 1
       };
     } else {
       record = {
-        "balance": this._controllerBalance,
-        "balance_atual": this._controllerBalanceAtual,
-        "nameCard": this._controllerNameCard,
+        "balance": int.parse(this._controllerBalance.text),
+        "balance_atual": int.parse(this._controllerBalanceAtual.text),
+        "nameCard": this._controllerNameCard.text,
         "type": 0
       };
     }
-    this.serviceCrudFireStore.addCard("MaNagOx8OJr6NKhmOkmC", record);
+    this.serviceCrudFireStore.addCard(CardPage.idUser, record);
   }
 
   bool creditCard = false;
@@ -104,15 +94,16 @@ class _AddCardPageState extends State<AddCardPage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width - 80,
                   child: RaisedButton(
-                      child: Text(
-                        "Add card",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.grey[700],
-                      onPressed: () {
-                        print("Deu certo");
-                        this.addCards();
-                      }),
+                    child: Text(
+                      "Add card",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    color: Colors.grey[700],
+                    onPressed: () {
+                      this.addCards();
+                      Navigator.pop(context);
+                    },
+                  ),
                 ),
               ],
             ),

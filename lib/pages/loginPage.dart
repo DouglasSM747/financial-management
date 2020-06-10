@@ -1,12 +1,24 @@
 import 'dart:developer';
-import 'package:financial/register_page.dart';
+import 'package:financial/crud/servicesAuth.dart';
+import 'package:financial/crud/servicesCrud.dart';
+import 'package:financial/layout/button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'register_page.dart';
 
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        textTheme: GoogleFonts.b612TextTheme(
+          Theme.of(context).textTheme,
+        ),
+        primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       title: "Login Screen",
       home: LoginPage(),
     );
@@ -19,7 +31,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Service service = new Service();
+  AuthService authService = new AuthService();
+  ServiceCrudFireStore serviceCrudFireStore = new ServiceCrudFireStore();
+  var inputEmail = TextEditingController(); //pegar a entrada
+  var inputPassword = TextEditingController(); //pegar a entrada
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -47,13 +62,13 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       SizedBox(
                         width: MediaQuery.of(context).size.width - 15,
-                        child:
-                            this.formText('Type your email here', Icons.email),
+                        child: this.formText(
+                            inputEmail, 'Type your email here', Icons.email),
                       ),
                       SizedBox(height: 20),
                       SizedBox(
                         width: MediaQuery.of(context).size.width - 15,
-                        child: this.formText(
+                        child: this.formText(inputPassword,
                             'Type your password here', Icons.lock,
                             password: true),
                       )
@@ -63,19 +78,27 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 20),
                 SizedBox(
                   width: MediaQuery.of(context).size.width - 80,
-                  child: RaisedButton(
-                      child: Text(
-                        "Sign In",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.grey[700],
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          print("validao");
+                  child: ButtonStandard(
+                    text: "Sign in",
+                    voidCallback: () async {
+                      if (_formKey.currentState.validate()) {
+                        var result =
+                            await authService.signInWithEmailAndPassword(
+                                inputEmail.text, inputPassword.text);
+                        if (result != null) {
+                          authService.someMethod().then((value) {
+                            serviceCrudFireStore.addUser(
+                              {
+                                "email": value,
+                              },
+                            );
+                          });
                         } else {
-                          print("not validao");
+                          print("error");
                         }
-                      }),
+                      }
+                    },
+                  ),
                 ),
                 SizedBox(height: 20),
                 Text(
@@ -119,8 +142,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  TextFormField formText(String texto, IconData icon, {bool password = false}) {
+  TextFormField formText(
+      TextEditingController textEditingController, String texto, IconData icon,
+      {bool password = false}) {
     return TextFormField(
+      controller: textEditingController,
       autofocus: false,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(

@@ -2,19 +2,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:financial/crud/servicesCrud.dart';
 import 'package:financial/layout/button.dart';
-import 'package:financial/pages/editCart.dart';
+import 'package:financial/pages/addCardPage.dart';
+import 'package:financial/pages/transitionsCard.dart';
 import 'package:flutter/material.dart';
+import 'editCartPage.dart';
 
 class CardClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        // Use the old theme but apply the following three changes
-        textTheme: Theme.of(context).textTheme.apply(
-              fontFamily: 'Open_Sans',
-            ),
-      ),
       debugShowCheckedModeBanner: false,
       title: "Card Screen",
       home: CardPage(),
@@ -23,14 +19,19 @@ class CardClass extends StatelessWidget {
 }
 
 class CardPage extends StatefulWidget {
-  @override
+  static final String idUser = "WNu7aujnhL84DXYn8ZY0";
   _CardPageState createState() => _CardPageState();
 }
 
 class _CardPageState extends State<CardPage> {
-  @override
-  int _current = 0;
-  int quantidadeCards; //verifica se é o ultimo item na lista
+  void goToaddCard() async {
+    await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => AddCardPage()));
+    //Run after await
+    loadUserCards;
+  }
+
+  int _current = 0; //atual index from card
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
     var i;
@@ -40,31 +41,42 @@ class _CardPageState extends State<CardPage> {
     return result;
   }
 
-  editarCart(int index) {
+  editarCart(int index) async {
     Map<String, dynamic> map = querySnapshot.documents[index].data;
-    if (map['type'] == 0) {
-      map['limit'] = 0;
-      map['limit_atual'] = 0;
-    }
-    if (map['type'] == 1) {
-      map['balance'] = 0;
-      map['balance_atual'] = 0;
-    }
+    EditCartPage editCartPage;
 
-    Navigator.push(
-      context,
+    if (map['type'] == 0) {
+      editCartPage = EditCartPage(
+        idCard: querySnapshot.documents[index].documentID,
+        type: map['type'],
+        balance: map['balance'],
+        balanceAtual: map['balance_atual'],
+      );
+    } else if (map['type'] == 1) {
+      editCartPage = EditCartPage(
+        idCard: querySnapshot.documents[index].documentID,
+        type: map['type'],
+        limit: map['limit'],
+        limitAtual: map['limit_atual'],
+      );
+    } else {
+      editCartPage = EditCartPage(
+        idCard: querySnapshot.documents[index].documentID,
+        type: map['type'],
+        balance: map['balance'],
+        balanceAtual: map['balance_atual'],
+        limit: map['limit'],
+        limitAtual: map['limit_atual'],
+      );
+    }
+    await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (BuildContext context) => EditCartPage(
-          idUser: "jseGCXq0n5tJ728Tsypa",
-          idCard: querySnapshot.documents[index].documentID,
-          type: map['type'],
-          balance: map['balance'],
-          balanceAtual: map['balance_atual'],
-          limit: map['limit'],
-          limitAtual: map['limit_atual'],
-        ),
+        builder: (context) => editCartPage,
       ),
     );
+    print("Terminou de editar");
+    //Run after await
+    loadUserCards;
   }
 
   //Instantiate servico FireStore
@@ -74,7 +86,7 @@ class _CardPageState extends State<CardPage> {
   DocumentSnapshot doc;
   get loadUserCards {
     //assigning user card data to a list, type QuerySnapshot;
-    serviceCrudFireStore.getCardsUser('nV9QUvjKSmZUhVA5m4v9').then(
+    serviceCrudFireStore.getCardsUser(CardPage.idUser).then(
       (onValue) {
         setState(
           () {
@@ -185,7 +197,9 @@ class _CardPageState extends State<CardPage> {
             width: 150,
             child: FlatButton(
               child: Image.asset('assets/images/Add.png'),
-              onPressed: () {},
+              onPressed: () {
+                goToaddCard();
+              },
             ),
           )
         ],
@@ -214,16 +228,17 @@ class _CardPageState extends State<CardPage> {
                 );
               },
               options: CarouselOptions(
-                  autoPlay: false,
-                  enlargeCenterPage: true,
-                  viewportFraction: 0.8,
-                  aspectRatio: 1.9,
-                  initialPage: 0,
-                  onPageChanged: (int index, CarouselPageChangedReason reason) {
-                    setState(() {
-                      _current = index;
-                    });
-                  }),
+                autoPlay: false,
+                enlargeCenterPage: true,
+                viewportFraction: 0.8,
+                aspectRatio: 1.9,
+                initialPage: 0,
+                onPageChanged: (int index, CarouselPageChangedReason reason) {
+                  setState(() {
+                    _current = index;
+                  });
+                },
+              ),
             ),
           ),
           Row(
@@ -249,7 +264,10 @@ class _CardPageState extends State<CardPage> {
           ButtonStandard(
             width: MediaQuery.of(context).size.width - 50,
             text: "Acess Cart",
-            voidCallback: () {},
+            voidCallback: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => TransitionsPage()));
+            },
           ),
           SizedBox(
             height: 20,
@@ -266,8 +284,10 @@ class _CardPageState extends State<CardPage> {
           ),
           ButtonStandard(
             width: MediaQuery.of(context).size.width - 50,
-            text: "Add Cart",
-            voidCallback: () {},
+            text: "Add Card",
+            voidCallback: () {
+              goToaddCard();
+            },
           )
         ],
       );

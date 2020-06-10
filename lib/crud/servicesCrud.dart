@@ -20,7 +20,7 @@ class ServiceCrudFireStore {
   Future<void> addUser(data) async {
     _db.collection("user").add(data).then(
       (result) {
-        print("Usuario Id: " + result.documentID);
+        print("User Id: " + result.documentID);
       },
     );
   }
@@ -38,13 +38,14 @@ class ServiceCrudFireStore {
         .getDocuments();
   }
 
-  void updateCardInfo(String idUser, String idCard, Map<String, dynamic> map) {
-    _db
+  updateCardInfo(String idUser, String idCard, Map<String, dynamic> map) async {
+    await _db
         .collection('user')
         .document(idUser)
         .collection('card')
         .document(idCard)
         .updateData(map);
+    print("Card Add into FireStore");
   }
 
   Future<void> addCard(String idUser, Map<String, dynamic> data) async {
@@ -53,14 +54,5 @@ class ServiceCrudFireStore {
         print("cartao adicionado");
       },
     );
-  }
-
-  void updateCardInfo(String idUser, String idCard, Map<String, dynamic> map) {
-    _db
-        .collection('user')
-        .document(idUser)
-        .collection('card')
-        .document(idCard)
-        .updateData(map);
   }
 }
