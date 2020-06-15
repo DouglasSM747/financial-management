@@ -1,3 +1,5 @@
+import 'package:financial/crud/servicesAuth.dart';
+import 'package:financial/crud/servicesCrud.dart';
 import 'package:financial/layout/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,7 +21,33 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  AuthService authService = new AuthService();
+  ServiceCrudFireStore serviceCrudFireStore = new ServiceCrudFireStore();
   final _formKey = GlobalKey<FormState>();
+  final _name = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  final _confirmPass = TextEditingController();
+
+  void _dialogErrorRegister() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Error Register"),
+          content: Text("'Password' not equals 'Confirm Passord'"),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("ok"),
+            )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,28 +73,29 @@ class _RegisterPageState extends State<RegisterPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      child: this.formText("Name", Icons.account_box),
+                      child: this.formText(_name, "Name", Icons.account_box),
                       width: MediaQuery.of(context).size.width - 15,
                     ),
                     SizedBox(
                       height: 18,
                     ),
                     SizedBox(
-                      child: this.formText("Email", Icons.email),
+                      child: this.formText(_email, "Email", Icons.email),
                       width: MediaQuery.of(context).size.width - 15,
                     ),
                     SizedBox(
                       height: 18,
                     ),
                     SizedBox(
-                      child: this.formText("Password", Icons.lock),
+                      child: this.formText(_password, "Password", Icons.lock),
                       width: MediaQuery.of(context).size.width - 15,
                     ),
                     SizedBox(
                       height: 18,
                     ),
                     SizedBox(
-                      child: this.formText("Confirm password", Icons.lock),
+                      child: this.formText(
+                          _confirmPass, "Confirm password", Icons.lock),
                       width: MediaQuery.of(context).size.width - 15,
                     ),
                     SizedBox(
@@ -80,12 +109,28 @@ class _RegisterPageState extends State<RegisterPage> {
                           // Validate will return true if the form is valid, or false if
                           // the form is invalid.
                           if (_formKey.currentState.validate()) {
-                            // Process data.
+                            if (_password.text == _confirmPass.text) {
+                              // add user to app (name, email)
+                              authService
+                                  .createUserWithEmailAndPassword(
+                                      _email.text, _password.text, _name.text)
+                                  .then(
+                                (value) {
+                                  if (value != null && value.isNotEmpty) {
+                                    serviceCrudFireStore.addUser({
+                                      "email": _email.text,
+                                      "name": _name.text
+                                    });
+                                  }
+                                },
+                              );
+                            } else {
+                              _dialogErrorRegister();
+                            }
                           }
                         },
                       ),
                     )
-                    /*  */
                   ],
                 ),
               )
@@ -99,8 +144,11 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  TextFormField formText(String texto, IconData icon, {bool password = false}) {
+  TextFormField formText(
+      TextEditingController textEditingController, String text, IconData icon,
+      {bool password = false}) {
     return TextFormField(
+      controller: textEditingController,
       autofocus: false,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
@@ -111,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
           borderRadius: BorderRadius.all(Radius.circular(20)),
           borderSide: BorderSide(color: Colors.white, width: 1.5),
         ),
-        hintText: texto,
+        hintText: text,
         prefixIcon: Icon(
           icon,
           color: Colors.white,
@@ -122,6 +170,16 @@ class _RegisterPageState extends State<RegisterPage> {
       obscureText: password,
       textAlign: TextAlign.start,
       validator: (value) {
+        if (text == "Email") {
+          bool emailValid = RegExp(
+                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+              .hasMatch(value);
+
+          if (emailValid == true) {
+            return null;
+          }
+          return "invalid email";
+        }
         if (value.isEmpty) {
           return 'Please enter some value';
         }

@@ -10,7 +10,7 @@ class AuthService {
   // Email & Password Sign Up
   Future<String> createUserWithEmailAndPassword(
       String email, String password, String name) async {
-    final currentUser = await _firebaseAuth.createUserWithEmailAndPassword(
+    final createdUser = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -18,8 +18,8 @@ class AuthService {
     // Update the username
     var userUpdateInfo = UserUpdateInfo();
     userUpdateInfo.displayName = name;
-    await currentUser.user.reload();
-    return currentUser.user.uid;
+    await createdUser.user.reload();
+    return createdUser.user.uid;
   }
 
   // Email & Password Sign In

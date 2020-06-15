@@ -25,6 +25,17 @@ class ServiceCrudFireStore {
     );
   }
 
+// Check is user of app
+  Future<String> getUserId(String email) async {
+    QuerySnapshot querySnapshot = await _db.collection("user").getDocuments();
+    for (var i = 0; i < querySnapshot.documents.length; i++) {
+      if (querySnapshot.documents[i].data['email'] == email) {
+        return querySnapshot.documents[i].documentID;
+      }
+    }
+    return "";
+  }
+
 // Class responsible for taking a user id and returning their cards
 // Example of use:
 //  service.getCardsUser('jseGCXq0n5tJ728Tsypa').then((onValue) {

@@ -1,7 +1,7 @@
-import 'dart:developer';
 import 'package:financial/crud/servicesAuth.dart';
 import 'package:financial/crud/servicesCrud.dart';
 import 'package:financial/layout/button.dart';
+import 'package:financial/pages/cardPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -35,6 +35,31 @@ class _LoginPageState extends State<LoginPage> {
   ServiceCrudFireStore serviceCrudFireStore = new ServiceCrudFireStore();
   var inputEmail = TextEditingController(); //pegar a entrada
   var inputPassword = TextEditingController(); //pegar a entrada
+
+  void _dialogNotUser() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Unregistered User"),
+          content: Text("Want to create a user?"),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => RegisterPage()));
+              },
+              child: Text("create acconut"),
+            ),
+            FlatButton(
+              onPressed: () {},
+              child: Text("cancel"),
+            )
+          ],
+        );
+      },
+    );
+  }
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -86,15 +111,18 @@ class _LoginPageState extends State<LoginPage> {
                             await authService.signInWithEmailAndPassword(
                                 inputEmail.text, inputPassword.text);
                         if (result != null) {
-                          authService.someMethod().then((value) {
-                            serviceCrudFireStore.addUser(
-                              {
-                                "email": value,
-                              },
-                            );
-                          });
+                          // check id user
+                          String idUser = await serviceCrudFireStore
+                              .getUserId(inputEmail.text);
+                          CardPage.idUser = idUser;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CardClass()),
+                          );
                         } else {
-                          print("error");
+                          // is not user
+                          _dialogNotUser();
                         }
                       }
                     },
@@ -143,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   TextFormField formText(
-      TextEditingController textEditingController, String texto, IconData icon,
+      TextEditingController textEditingController, String text, IconData icon,
       {bool password = false}) {
     return TextFormField(
       controller: textEditingController,
@@ -157,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.all(Radius.circular(20)),
           borderSide: BorderSide(color: Colors.white, width: 1.5),
         ),
-        hintText: texto,
+        hintText: text,
         prefixIcon: Icon(
           icon,
           color: Colors.white,

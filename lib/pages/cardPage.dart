@@ -19,7 +19,7 @@ class CardClass extends StatelessWidget {
 }
 
 class CardPage extends StatefulWidget {
-  static final String idUser = "WNu7aujnhL84DXYn8ZY0";
+  static String idUser = "";
   _CardPageState createState() => _CardPageState();
 }
 
